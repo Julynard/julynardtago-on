@@ -1,3 +1,25 @@
+// Light/dark switch. Dark is the default; the choice is remembered.
+(function () {
+  var root = document.documentElement;
+  var button = document.querySelector('.theme-toggle');
+  var meta = document.querySelector('meta[name="theme-color"]');
+
+  function apply(theme) {
+    root.setAttribute('data-theme', theme);
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0F1513' : '#F5F7F4');
+    if (button) button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    document.dispatchEvent(new CustomEvent('themechange'));
+  }
+
+  apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+  if (button) button.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+})();
+
 // Highlight the nav link for the section in view.
 (function () {
   var links = document.querySelectorAll('.nav a');
@@ -69,7 +91,6 @@
 
   var ctx = canvas.getContext('2d');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var dark = window.matchMedia('(prefers-color-scheme: dark)');
   var particles = [];
   var pointer = { x: -9999, y: -9999 };
   var running = false;
@@ -220,12 +241,321 @@
       if (hero.clientWidth !== width) reset();
     }, 200);
   });
-  [still, dark].forEach(function (query) {
-    if (query.addEventListener) query.addEventListener('change', reset);
-  });
+  if (still.addEventListener) still.addEventListener('change', reset);
+  document.addEventListener('themechange', function () { if (width) reset(); });
 
   var fontsReady = document.fonts && document.fonts.load
     ? document.fonts.load('800 100px "Schibsted Grotesk"')
     : Promise.resolve();
   fontsReady.then(reset, reset);
+})();
+
+// Smooth page scrolling (Lenis). Skipped when the visitor prefers reduced motion.
+(function () {
+  if (!window.Lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  new window.Lenis({ autoRaf: true, anchors: true });
+})();
+
+// Repo links without a URL yet: clickable, but they don't jump the page.
+document.addEventListener('click', function (e) {
+  var link = e.target.closest && e.target.closest('a.repo-link[href="#"]');
+  if (link) e.preventDefault();
+});
+
+// Projects scroller: loops forever, cards drifting in from the left.
+// Hover, focus, dragging or the arrows pause it; reduced motion stops it.
+(function () {
+  var track = document.querySelector('.side-track');
+  if (!track) return;
+  var buttons = document.querySelectorAll('.scroller-btn');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var SPEED = 32; // px per second
+
+  // Second copy of the cards makes the loop seamless. Copies are hidden from
+  // screen readers and keyboard focus.
+  var originals = Array.prototype.slice.call(track.children);
+  originals.forEach(function (card) {
+    var copy = card.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    copy.setAttribute('inert', '');
+    copy.querySelectorAll('a, button').forEach(function (el) { el.setAttribute('tabindex', '-1'); });
+    track.appendChild(copy);
+  });
+
+  var loop = 0;      // width of one full set of cards
+  var pos = 0;       // fractional scroll position we drive
+  var hovering = false;
+  var focused = false;
+  var dragging = false;
+  var visible = true;
+  var pausedUntil = 0;
+  var last = 0;
+
+  function measure() {
+    loop = track.children[originals.length].offsetLeft - track.children[0].offsetLeft;
+  }
+
+  function wrap() {
+    // Stay inside the middle of the doubled strip so either direction loops.
+    if (track.scrollLeft < 1) track.scrollLeft += loop;
+    else if (track.scrollLeft >= loop * 2 - track.clientWidth - 1) track.scrollLeft -= loop;
+  }
+
+  function cardStep() {
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+    return originals[0].getBoundingClientRect().width + gap;
+  }
+
+  function pauseFor(ms) { pausedUntil = performance.now() + ms; }
+
+  function frame(now) {
+    var dt = last ? Math.min(now - last, 64) / 1000 : 0;
+    last = now;
+    var moving = !still.matches && visible && !hovering && !focused && !dragging && now > pausedUntil;
+    if (moving && loop) {
+      if (Math.abs(track.scrollLeft - pos) > 2) pos = track.scrollLeft; // someone else scrolled
+      pos -= SPEED * dt; // content moves right
+      if (pos < 1) pos += loop;
+      track.scrollLeft = pos;
+    } else {
+      pos = track.scrollLeft;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    measure();
+    track.scrollLeft = loop; // begin on the copy so there's room to drift right
+    pos = track.scrollLeft;
+    requestAnimationFrame(frame);
+  }
+
+  track.addEventListener('scroll', function () { if (!dragging) wrap(); }, { passive: true });
+  track.addEventListener('mouseenter', function () { hovering = true; });
+  track.addEventListener('mouseleave', function () { hovering = false; });
+  track.addEventListener('focusin', function () { focused = true; });
+  track.addEventListener('focusout', function () { focused = false; });
+  window.addEventListener('resize', function () { measure(); wrap(); });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(track);
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      pauseFor(2500);
+      track.scrollBy({ left: cardStep() * Number(b.dataset.dir), behavior: still.matches ? 'auto' : 'smooth' });
+    });
+  });
+
+  // Drag to scroll with a mouse; touch and trackpads scroll natively.
+  var startX = 0;
+  var startLeft = 0;
+  var moved = false;
+
+  track.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragging = true;
+    moved = false;
+    startX = e.clientX;
+    startLeft = track.scrollLeft;
+  });
+
+  window.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 5) {
+      moved = true;
+      track.classList.add('is-dragging');
+    }
+    if (!moved) return;
+    var left = startLeft - dx;
+    // Loop while dragging too, keeping the grab point under the pointer.
+    if (left < 1) { left += loop; startLeft += loop; }
+    else if (left >= loop * 2 - track.clientWidth - 1) { left -= loop; startLeft -= loop; }
+    track.scrollLeft = left;
+  });
+
+  window.addEventListener('pointerup', function () {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+    pauseFor(1500);
+  });
+
+  // A drag shouldn't count as a click on a card's link.
+  track.addEventListener('click', function (e) {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start);
+})();
+
+// Experience: lists longer than three bullets fold, with a toggle after the
+// last bullet. Without JavaScript every bullet simply shows.
+(function () {
+  var VISIBLE = 3;
+  document.querySelectorAll('.jobs > li ul').forEach(function (list, i) {
+    var extra = Array.prototype.slice.call(list.children, VISIBLE);
+    if (!extra.length) return;
+
+    list.id = list.id || 'job-bullets-' + i;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'more-toggle';
+    button.setAttribute('aria-controls', list.id);
+    list.insertAdjacentElement('afterend', button);
+
+    function set(open) {
+      extra.forEach(function (li) {
+        li.classList.toggle('is-folded', !open);
+        li.classList.toggle('is-revealed', open);
+      });
+      button.setAttribute('aria-expanded', String(open));
+      button.textContent = open ? 'Show less' : 'Show ' + extra.length + ' more';
+    }
+
+    button.addEventListener('click', function () {
+      var open = button.getAttribute('aria-expanded') !== 'true';
+      set(open);
+      if (open) {
+        // Move focus to the first revealed bullet for keyboard and screen reader users.
+        extra[0].setAttribute('tabindex', '-1');
+        extra[0].focus({ preventScroll: true });
+      }
+    });
+    set(false);
+  });
+})();
+
+// Floating back-to-top button: appears once the hero has scrolled away.
+(function () {
+  var button = document.querySelector('.to-top');
+  var hero = document.querySelector('.hero');
+  if (!button || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    button.classList.toggle('is-shown', !entries[0].isIntersecting);
+  }).observe(hero);
+})();
+
+// Trusted by: loop the logos sideways. The copy is hidden from screen readers.
+(function () {
+  var marquee = document.querySelector('.logo-marquee');
+  if (!marquee || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var list = marquee.querySelector('.logos');
+  Array.prototype.slice.call(list.children).forEach(function (item) {
+    var copy = item.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    list.appendChild(copy);
+  });
+  marquee.classList.add('is-looping');
+})();
+
+// Ambient background: faint drifting particles with thin links between
+// neighbours, kept low-contrast so content stays easy to read.
+(function () {
+  var canvas = document.querySelector('.ambient');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var dots = [];
+  var pointer = { x: -9999, y: -9999 };
+  var width = 0;
+  var height = 0;
+  var rgb = '127,217,190';
+  var LINK = 120;
+
+  function readColor() {
+    var hex = getComputedStyle(document.documentElement).getPropertyValue('--ambient').trim().replace('#', '');
+    var n = parseInt(hex, 16);
+    if (!isNaN(n)) rgb = [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(',');
+  }
+
+  function build() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var count = Math.max(28, Math.min(110, Math.round(width * height / 15000)));
+    dots = [];
+    for (var i = 0; i < count; i++) {
+      dots.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: 0.6 + Math.random() * 1.4
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    for (var i = 0; i < dots.length; i++) {
+      var a = dots[i];
+      for (var j = i + 1; j < dots.length; j++) {
+        var b = dots[j];
+        var dx = a.x - b.x;
+        var dy = a.y - b.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK) {
+          ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.12 * (1 - d / LINK)).toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      var px = a.x - pointer.x;
+      var py = a.y - pointer.y;
+      var pd = Math.sqrt(px * px + py * py);
+      if (pd < LINK * 1.3) {
+        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.2 * (1 - pd / (LINK * 1.3))).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(pointer.x, pointer.y);
+        ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(' + rgb + ',.35)';
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function tick() {
+    for (var i = 0; i < dots.length; i++) {
+      var p = dots[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = width + 10; else if (p.x > width + 10) p.x = -10;
+      if (p.y < -10) p.y = height + 10; else if (p.y > height + 10) p.y = -10;
+    }
+    draw();
+    if (!still.matches) requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('pointermove', function (e) { pointer.x = e.clientX; pointer.y = e.clientY; }, { passive: true });
+  document.addEventListener('pointerleave', function () { pointer.x = pointer.y = -9999; });
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      // Mobile URL bars change only the height; keep the dots where they are then.
+      var keep = window.innerWidth === width ? dots : null;
+      build();
+      if (keep) dots = keep;
+      if (still.matches) draw();
+    }, 200);
+  });
+  document.addEventListener('themechange', function () { readColor(); if (still.matches) draw(); });
+
+  readColor();
+  build();
+  tick();
 })();

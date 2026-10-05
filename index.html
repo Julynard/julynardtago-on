@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,8 +8,15 @@
   <meta name="keywords" content="Julynard Tago-on, Laravel developer, PHP developer, Vue.js, full-stack engineer, Philippines">
   <meta property="og:title" content="Julynard L. Tago-on, Full-Stack Engineer">
   <meta property="og:description" content="Laravel, PHP and Vue.js engineer. 6 years, 12 client applications, 2,000+ commits at CoreProc.">
-  <meta property="og:image" content="https://julynardtago-on.netlify.app/img/julynard.png">
-  <meta name="theme-color" content="#0F5A4A">
+  <meta property="og:image" content="https://julynardtago-on.netlify.app/img/julynard-2026.jpg">
+  <meta name="theme-color" content="#0F1513">
+  <script>
+    // Apply a saved theme before first paint. Dark is the default.
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
+    } catch (e) {}
+  </script>
 
   <link href="img/JLT.ico" rel="icon" sizes="any">
   <link href="img/icon-192.png" rel="icon" type="image/png" sizes="192x192">
@@ -22,6 +29,7 @@
 </head>
 
 <body>
+  <canvas class="ambient" aria-hidden="true"></canvas>
   <a class="skip" href="#main">Skip to content</a>
 
   <header class="topbar">
@@ -30,12 +38,16 @@
       <nav aria-label="Sections">
         <ul class="nav">
           <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#experience">Experience</a></li>
-          <li><a href="#skills">Skills</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
       <a class="btn btn-small" href="files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Resume PDF</a>
     </div>
   </header>
@@ -47,16 +59,21 @@
       <div class="wrap hero-grid">
         <div class="hero-text">
           <h1>Julynard Tago&#8209;on</h1>
-          <p class="hero-role">Full-stack engineer. Laravel, PHP and Vue.js.</p>
+          <p class="hero-role">Full-stack engineer</p>
           <p class="hero-lede">I build and look after web applications for retail loyalty, field sales, payments and SaaS teams, from the design spec through to production.</p>
           <div class="hero-actions">
             <a class="btn" href="files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Download resume</a>
-            <a class="btn btn-ghost" href="mailto:tagoonjulynard@gmail.com?subject=Demo%20request&amp;body=Hi%20Julynard%2C%0D%0A%0D%0AI%27d%20like%20a%20demo.%0D%0A%0D%0AWhat%20I%27d%20like%20to%20see%3A%20%0D%0ACompany%3A%20%0D%0APreferred%20date%20and%20time%3A%20%0D%0A">Request a demo</a>
-            <a class="link hero-link" href="#contact">Send a message</a>
+            <a class="btn btn-ghost" href="https://cal.com/julynard-tago-on/30min" target="_blank" rel="noopener">Book a call</a>
+            <a class="icon-pill hero-message" href="#contact" aria-label="Send a message" title="Send a message"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg></a>
           </div>
           <p class="hero-where">Based in Dasmariñas, Cavite. Working remotely.</p>
         </div>
-        <img class="hero-photo" src="img/julynard.png" width="500" height="500" alt="Portrait of Julynard Tago-on">
+        <div class="hero-photo">
+          <div class="portrait-clip">
+            <img class="portrait-dark" src="img/portrait-dark.webp" width="800" height="800" alt="Portrait of Julynard Tago-on">
+            <img class="portrait-light" src="img/portrait-light.webp" width="800" height="800" loading="lazy" alt="Portrait of Julynard Tago-on wearing pixel sunglasses">
+          </div>
+        </div>
       </div>
 
       <div class="wrap">
@@ -83,14 +100,16 @@
           <h2 id="trusted-title">Trusted by</h2>
           <p class="trusted-sub">Companies I've worked with</p>
         </div>
-        <ul class="logos">
-          <li><img src="img/companies/coreproc.svg" width="72" height="72" alt="" loading="lazy"><span>CoreProc</span></li>
-          <li><img src="img/companies/cloudtech.png" width="200" height="77" alt="" loading="lazy"><span>CloudTech ERP</span></li>
-          <li><img src="img/companies/pcieerd.png" width="240" height="240" alt="" loading="lazy"><span>DOST-PCIEERD</span></li>
-          <li><img src="img/companies/psa.svg" width="120" height="120" alt="" loading="lazy"><span>Philippine Statistics Authority</span></li>
-          <li><img src="img/companies/pcu.png" width="240" height="238" alt="" loading="lazy"><span>Philippine Christian University</span></li>
-          <li><img src="img/companies/dinoland.webp" width="320" height="242" alt="" loading="lazy"><span>Dinoland</span></li>
-        </ul>
+        <div class="logo-marquee">
+          <ul class="logos">
+            <li><img src="img/companies/coreproc.svg" width="72" height="72" alt=""><span>CoreProc</span></li>
+            <li><img src="img/companies/cloudtech.png" width="200" height="77" alt=""><span>CloudTech ERP</span></li>
+            <li><img src="img/companies/pcieerd.png" width="240" height="240" alt=""><span>DOST-PCIEERD</span></li>
+            <li><img src="img/companies/psa.svg" width="120" height="120" alt=""><span>Philippine Statistics Authority</span></li>
+            <li><img src="img/companies/pcu.png" width="240" height="238" alt=""><span>Philippine Christian University</span></li>
+            <li><img src="img/companies/dinoland.webp" width="320" height="242" alt=""><span>Dinoland</span></li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -105,43 +124,206 @@
       </div>
     </section>
 
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="wrap split">
+        <h2 id="skills-title">Skills</h2>
+        <div class="skill-groups">
+          <div class="skill-group">
+            <h3>Core stack</h3>
+            <ul class="chips">
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/php.svg')" aria-hidden="true"></span>PHP</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/laravel.svg')" aria-hidden="true"></span>Laravel</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/vuedotjs.svg')" aria-hidden="true"></span>Vue.js</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/inertia.svg')" aria-hidden="true"></span>Inertia.js</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/mysql.svg')" aria-hidden="true"></span>MySQL</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/tailwindcss.svg')" aria-hidden="true"></span>Tailwind CSS</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Backend</h3>
+            <ul class="chips">
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/php.svg')" aria-hidden="true"></span>PHP 8</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/laravel.svg')" aria-hidden="true"></span>Laravel 5.8 to 12</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/laravelnova.svg')" aria-hidden="true"></span>Laravel Nova</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/laravelhorizon.svg')" aria-hidden="true"></span>Laravel Horizon</li>
+              <li class="chip">Queues</li>
+              <li class="chip">REST APIs</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/codeigniter.svg')" aria-hidden="true"></span>CodeIgniter 4</li>
+              <li class="chip">NetSuite SuiteScript</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Frontend</h3>
+            <ul class="chips">
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/vuedotjs.svg')" aria-hidden="true"></span>Vue.js 2 and 3</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/inertia.svg')" aria-hidden="true"></span>Inertia.js</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/javascript.svg')" aria-hidden="true"></span>JavaScript</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/tailwindcss.svg')" aria-hidden="true"></span>Tailwind CSS</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/jquery.svg')" aria-hidden="true"></span>jQuery</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/axios.svg')" aria-hidden="true"></span>Axios</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/html5.svg')" aria-hidden="true"></span>HTML</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/css.svg')" aria-hidden="true"></span>CSS</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Data</h3>
+            <ul class="chips">
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/mysql.svg')" aria-hidden="true"></span>MySQL</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/redis.svg')" aria-hidden="true"></span>Redis</li>
+              <li class="chip">Multi-tenant databases</li>
+              <li class="chip">Query optimization</li>
+              <li class="chip">CSV and Excel import/export</li>
+              <li class="chip">Power BI feeds</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Integrations</h3>
+            <ul class="chips">
+              <li class="chip">Salesforce</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/paypal.svg')" aria-hidden="true"></span>PayPal</li>
+              <li class="chip">PayMaya</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/google.svg')" aria-hidden="true"></span>Google OAuth and SSO</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/firebase.svg')" aria-hidden="true"></span>Firebase Cloud Messaging</li>
+              <li class="chip">SFTP ingestion</li>
+              <li class="chip">AWS S3</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/minio.svg')" aria-hidden="true"></span>MinIO</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>DevOps and quality</h3>
+            <ul class="chips">
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/docker.svg')" aria-hidden="true"></span>Docker</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/jenkins.svg')" aria-hidden="true"></span>Jenkins</li>
+              <li class="chip">CI/CD</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/git.svg')" aria-hidden="true"></span>Git</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/github.svg')" aria-hidden="true"></span>GitHub</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/gitlab.svg')" aria-hidden="true"></span>GitLab</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/bitbucket.svg')" aria-hidden="true"></span>Bitbucket</li>
+              <li class="chip">PHPUnit</li>
+              <li class="chip">PHPStan</li>
+              <li class="chip">PHP_CodeSniffer</li>
+              <li class="chip">Laravel Pint</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Ways of working</h3>
+            <ul class="chips">
+              <li class="chip">Agile and Scrum</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/jira.svg')" aria-hidden="true"></span>Jira</li>
+              <li class="chip">Technical design specs</li>
+              <li class="chip">Code review</li>
+              <li class="chip">QA test plans</li>
+              <li class="chip"><span class="chip-icon" style="--icon: url('/img/skills/claude.svg')" aria-hidden="true"></span>Claude Code</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="wrap split">
-        <h2 id="projects-title">Selected projects</h2>
-        <div>
-          <p class="note">Client work at CoreProc. The code is private, so these describe the problem and my part in it.</p>
-          <ul class="projects">
-            <li>
+        <h2 id="projects-title">Projects</h2>
+        <div class="scroller">
+          <div class="scroller-head">
+            <p class="note">Client work, freelance builds and personal projects. Client code is private, so those cards describe the problem and my part in it. Hover to pause, or drag and use the arrows to browse.</p>
+            <div class="scroller-buttons">
+              <button class="scroller-btn" type="button" data-dir="-1" aria-label="Previous projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <button class="scroller-btn" type="button" data-dir="1" aria-label="Next projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+          </div>
+          <ul class="side-track" tabindex="0" aria-label="Projects, scrolls sideways">
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Client work at CoreProc</p>
               <h3>Multi-tenant field-sales platform</h3>
               <p>Per-tenant activity data, nightly BI exports to S3 and Power BI, and mobile data sync for field supervisors at a multinational FMCG client.</p>
               <p class="meta"><span class="role">Core developer, #2 by commits. Design specs and performance fixes.</span> <span class="stack">Laravel, Nova, MySQL, Redis, S3</span></p>
             </li>
-            <li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Client work at CoreProc</p>
               <h3>Payments reconciliation system</h3>
               <p>Matches PayMaya, kiosk cash (over SFTP) and mobile-app transactions with scheduled imports and CI quality gates.</p>
               <p class="meta"><span class="role">Led delivery from setup to production. 97 of 107 commits.</span> <span class="stack">Laravel, Nova, scheduled jobs, SFTP</span></p>
             </li>
-            <li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Client work at CoreProc</p>
               <h3>Team-collaboration SaaS</h3>
               <p>Sign-up, Google SSO, paid PayPal subscriptions and team credits.</p>
               <p class="meta"><span class="role">Top contributor, 600+ commits.</span> <span class="stack">Laravel, Inertia.js, Vue 3, PayPal</span></p>
             </li>
-            <li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Client work at CoreProc</p>
               <h3>Wholesaler performance portal</h3>
               <p>Sales targets, dashboards, Salesforce data and bulk import and export for a wholesaler network.</p>
               <p class="meta"><span class="role">Top contributor, 300+ commits.</span> <span class="stack">Laravel, Inertia.js, Vue, MySQL views</span></p>
             </li>
+            <li class="side-card">
+              <div class="card-media"><img src="img/dinoland-site.webp" width="1280" height="684" loading="lazy" alt="Dinoland public website home page"></div>
+              <p class="kind">Freelance</p>
+              <h3><a class="repo-link" href="https://system.dinolandph.com" target="_blank" rel="noopener">Dinoland ticketing</a></h3>
+              <p>A public site and a ticket management system for a dinosaur-themed attraction, covering ticket status, purchase orders, revenue reports and an audit trail.</p>
+              <p class="meta"><span class="role">Designed and built it, Oct 2023 to Feb 2024.</span> <span class="stack">Laravel, jQuery</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="Payout Reconciler on GitHub">Payout Reconciler <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Matches e-wallet exports, kiosk cash files over SFTP and app orders against a ledger, then flags what's missing or mismatched.</p>
+              <p class="meta"><span class="role">Based on the payments reconciliation system I led at CoreProc.</span> <span class="stack">Laravel, Nova, scheduled jobs, SFTP</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="FieldTrack on GitHub">FieldTrack <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Multi-tenant app for field sales reps: store visits, GPS check-ins, offline sync and a supervisor dashboard by district.</p>
+              <p class="meta"><span class="role">Based on the field-sales platform and multi-district sync work.</span> <span class="stack">Laravel, Vue 3 PWA, MySQL, Redis</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="Laravel Export Kit on GitHub">Laravel Export Kit <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Open-source package for large exports: queued, chunked jobs streamed to S3 or CSV, with an N+1 query detector.</p>
+              <p class="meta"><span class="role">Based on fixing timeouts across 26 BI export processors.</span> <span class="stack">Laravel package, Horizon, S3, MinIO</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="TeamCredits SaaS Starter on GitHub">TeamCredits SaaS Starter <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>A starting point for SaaS apps with Google sign-in, PayPal subscriptions, team invites and a shared credit balance.</p>
+              <p class="meta"><span class="role">Based on the team-collaboration SaaS.</span> <span class="stack">Laravel, Inertia.js, Vue 3, PayPal</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="TicketGate on GitHub">TicketGate <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Ticketing and QR check-in for attractions and events, with purchase orders, daily revenue reports and an audit trail.</p>
+              <p class="meta"><span class="role">Based on the Dinoland ticket system and PCU QR attendance.</span> <span class="stack">Laravel, Vue, QR scanning</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="ApprovalFlow on GitHub">ApprovalFlow <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>A configurable multi-step approval engine for expense requests, with email notifications and overdue alerts.</p>
+              <p class="meta"><span class="role">Based on the DOST-PCIEERD expense approval workflow.</span> <span class="stack">Laravel, Livewire</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="Live Quiz Scoreboard on GitHub">Live Quiz Scoreboard <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Real-time quiz competitions: a host screen, contestants on their phones, live scoring and a lag indicator per player.</p>
+              <p class="meta"><span class="role">Based on the PSA science quiz bee system.</span> <span class="stack">Laravel Reverb, Vue 3</span></p>
+            </li>
+            <li class="side-card">
+              <div class="card-media is-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg><span>Screenshot coming soon</span></div>
+              <p class="kind">Personal project</p>
+              <h3><a class="repo-link" href="#" aria-label="Claude Code Skills for Laravel Teams on GitHub">Claude Code Skills for Laravel Teams <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
+              <p>Public versions of the skills I use daily: PR drafting, ERD generation from migrations and tenant schema drift repair.</p>
+              <p class="meta"><span class="role">Based on my own AI-assisted workflow.</span> <span class="stack">Claude Code skills, Bash, PHP</span></p>
+            </li>
           </ul>
-
-          <div class="freelance">
-            <h3>Freelance: Dinoland</h3>
-            <p>A public site and a ticket management system for a dinosaur-themed attraction, covering ticket status, purchase orders, revenue reports and a user activity audit trail.</p>
-            <div class="shots">
-              <a href="img/dinoland-site.webp" target="_blank" rel="noopener"><img src="img/dinoland-site.webp" width="1280" height="684" loading="lazy" alt="Dinoland public website home page"></a>
-              <a href="img/dinoland-tickets.webp" target="_blank" rel="noopener"><img src="img/dinoland-tickets.webp" width="1280" height="684" loading="lazy" alt="Dinoland ticket system sign-in screen"></a>
-            </div>
-            <p><a class="link" href="https://system.dinolandph.com" target="_blank" rel="noopener">Visit system.dinolandph.com</a></p>
-          </div>
         </div>
       </div>
     </section>
@@ -156,13 +338,13 @@
               <h3>CoreProc Inc.</h3>
               <p class="title">Full-Stack Developer</p>
               <ul>
-                <li>Led delivery of a payments reconciliation system from setup to production, covering PayMaya, SFTP kiosk and mobile-transaction matching, scheduled imports and CI quality gates.</li>
-                <li>Set the planning standard on a multi-tenant field-sales platform by writing design specs, implementation plans and QA test plans before coding.</li>
-                <li>Eliminated N+1 queries across 26 BI export processors and resolved export timeouts with queued, chunked jobs.</li>
-                <li>Diagnosed and fixed production incidents, including a login redirect broken by a library upgrade, failed data sync for multi-district supervisors, and PesoPay and PayPal payment failures.</li>
-                <li>Owned a wholesaler performance portal and a team-collaboration SaaS as top contributor, shipping dashboards, Salesforce integration, Google SSO and PayPal subscriptions.</li>
-                <li>Reviewed pull requests across client projects and onboarded new developers to the codebase, Docker setup and team conventions.</li>
-                <li>Brought AI-assisted development to the team with Claude Code skills for PR drafting, QA schema repair and ERD generation.</li>
+                <li>Led delivery of a <mark>payments reconciliation system</mark> from setup to production, covering PayMaya, SFTP kiosk and mobile-transaction matching, scheduled imports and CI quality gates.</li>
+                <li>Set the <mark>planning standard</mark> on a multi-tenant field-sales platform by writing design specs, implementation plans and QA test plans before coding.</li>
+                <li>Eliminated N+1 queries across <mark>26 BI export processors</mark> and resolved export timeouts with queued, chunked jobs.</li>
+                <li>Diagnosed and fixed <mark>production incidents</mark>, including a login redirect broken by a library upgrade, failed data sync for multi-district supervisors, and PesoPay and PayPal payment failures.</li>
+                <li>Owned a wholesaler performance portal and a team-collaboration SaaS as <mark>top contributor</mark>, shipping dashboards, Salesforce integration, Google SSO and PayPal subscriptions.</li>
+                <li>Reviewed pull requests across client projects and <mark>onboarded new developers</mark> to the codebase, Docker setup and team conventions.</li>
+                <li>Brought AI-assisted development to the team with <mark>Claude Code skills</mark> for PR drafting, QA schema repair and ERD generation.</li>
               </ul>
             </div>
           </li>
@@ -172,7 +354,7 @@
               <h3>Dinoland</h3>
               <p class="title">Full-Stack Developer, contract</p>
               <ul>
-                <li>Designed and built a ticket management system in Laravel and jQuery, covering ticket status tracking, purchase orders, revenue reports and a user activity audit trail.</li>
+                <li>Designed and built a <mark>ticket management system</mark> in Laravel and jQuery, covering ticket status tracking, purchase orders, revenue reports and a user activity audit trail.</li>
               </ul>
             </div>
           </li>
@@ -194,7 +376,7 @@
               <p class="title">Information Analyst II</p>
               <ul>
                 <li>Automated the project-expense approval workflow in the agency's Laravel project management system, cutting approval time by <mark>60%</mark>.</li>
-                <li>Built project timeline tracking that flags overdue milestones across the project portfolio.</li>
+                <li>Built project timeline tracking that flags <mark>overdue milestones</mark> across the project portfolio.</li>
                 <li>Rebuilt search across 1,000+ approved projects, cutting search time by <mark>70%</mark>.</li>
               </ul>
             </div>
@@ -206,7 +388,7 @@
               <p class="title">Information Analyst I</p>
               <ul>
                 <li>Led the move from paper to digital forms for the Family Income and Expenditure Survey, raising survey completion rates by <mark>50%</mark>.</li>
-                <li>Built an online science quiz bee system in CodeIgniter 4 with real-time scoring and Wi-Fi latency monitoring for fair live competition.</li>
+                <li>Built an online science quiz bee system in CodeIgniter 4 with <mark>real-time scoring</mark> and Wi-Fi latency monitoring for fair live competition.</li>
               </ul>
             </div>
           </li>
@@ -232,20 +414,6 @@
       </div>
     </section>
 
-    <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="wrap split">
-        <h2 id="skills-title">Skills</h2>
-        <dl class="skills">
-          <div><dt>Backend</dt><dd>PHP 8, Laravel 5.8 to 12, Laravel Nova, Horizon and queues, REST APIs, CodeIgniter 4, NetSuite SuiteScript</dd></div>
-          <div><dt>Frontend</dt><dd>Vue.js 2 and 3, Inertia.js, JavaScript, Tailwind CSS, jQuery, Axios, HTML, CSS</dd></div>
-          <div><dt>Data</dt><dd>MySQL (views, query optimization, N+1 elimination), Redis, multi-tenant databases, bulk CSV and Excel import/export, Power BI feeds</dd></div>
-          <div><dt>Integrations</dt><dd>Salesforce, PayPal subscriptions, PayMaya, Google OAuth and SSO, Firebase Cloud Messaging, SFTP ingestion, AWS S3, MinIO</dd></div>
-          <div><dt>DevOps and quality</dt><dd>Docker, Jenkins, CI/CD, Git (GitHub, GitLab, Bitbucket), PHPUnit, PHPStan, PHP_CodeSniffer, Laravel Pint</dd></div>
-          <div><dt>Ways of working</dt><dd>Agile and Scrum, Jira, technical design specs, code review, QA test plans, AI-assisted development with Claude Code</dd></div>
-        </dl>
-      </div>
-    </section>
-
     <section class="section" aria-labelledby="quotes-title">
       <div class="wrap split">
         <h2 id="quotes-title">From teammates</h2>
@@ -267,17 +435,17 @@
         <div>
           <h2 id="contact-title">Contact</h2>
           <p class="contact-lede">Have a role, a project or a question? Send a message and I'll reply by email.</p>
-          <ul class="contact-list">
-            <li><a href="mailto:tagoonjulynard@gmail.com">tagoonjulynard@gmail.com</a></li>
-            <li><a href="tel:+639368775472">0936 877 5472</a></li>
-            <li><a href="https://www.linkedin.com/in/julynard-tago-on/" target="_blank" rel="noopener">LinkedIn</a></li>
-            <li><a href="https://github.com/Julynard" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="https://www.facebook.com/julynard10" target="_blank" rel="noopener">Facebook</a></li>
+          <ul class="contact-icons">
+            <li><a class="icon-pill" href="mailto:tagoonjulynard@gmail.com" aria-label="Email tagoonjulynard@gmail.com" title="Email tagoonjulynard@gmail.com"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/></svg></a></li>
+            <li><a class="icon-pill" href="tel:+639368775472" aria-label="Call 0936 877 5472" title="Call 0936 877 5472"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/></svg></a></li>
+            <li><a class="icon-pill" href="https://www.linkedin.com/in/julynard-tago-on/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/></svg></a></li>
+            <li><a class="icon-pill" href="https://github.com/Julynard" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg></a></li>
+            <li><a class="icon-pill" href="https://www.facebook.com/julynard10" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a></li>
           </ul>
           <div class="demo">
-            <h3>Request a demo</h3>
-            <p>Want to see a system I've built? Email me and I'll set up a walkthrough.</p>
-            <a class="btn" href="mailto:tagoonjulynard@gmail.com?subject=Demo%20request&amp;body=Hi%20Julynard%2C%0D%0A%0D%0AI%27d%20like%20a%20demo.%0D%0A%0D%0AWhat%20I%27d%20like%20to%20see%3A%20%0D%0ACompany%3A%20%0D%0APreferred%20date%20and%20time%3A%20%0D%0A">Email a demo request</a>
+            <h3>Book a call</h3>
+            <p>Want to talk about a role or a project? Pick a 30-minute slot that suits you.</p>
+            <a class="btn" href="https://cal.com/julynard-tago-on/30min" target="_blank" rel="noopener">Book a 30-minute call</a>
           </div>
         </div>
 
@@ -315,6 +483,9 @@
     </div>
   </footer>
 
+  <a class="to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/></svg></a>
+
+  <script src="js/vendor/lenis.min.js" defer></script>
   <script src="js/site.js" defer></script>
 </body>
 </html>
