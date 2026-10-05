@@ -29,6 +29,7 @@
 </head>
 
 <body>
+  <canvas class="ambient" aria-hidden="true"></canvas>
   <a class="skip" href="#main">Skip to content</a>
 
   <header class="topbar">
@@ -58,12 +59,12 @@
       <div class="wrap hero-grid">
         <div class="hero-text">
           <h1>Julynard Tago&#8209;on</h1>
-          <p class="hero-role">Full-stack engineer. Laravel, PHP and Vue.js.</p>
+          <p class="hero-role">Full-stack engineer</p>
           <p class="hero-lede">I build and look after web applications for retail loyalty, field sales, payments and SaaS teams, from the design spec through to production.</p>
           <div class="hero-actions">
             <a class="btn" href="files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Download resume</a>
             <a class="btn btn-ghost" href="mailto:tagoonjulynard@gmail.com?subject=Demo%20request&amp;body=Hi%20Julynard%2C%0D%0A%0D%0AI%27d%20like%20a%20demo.%0D%0A%0D%0AWhat%20I%27d%20like%20to%20see%3A%20%0D%0ACompany%3A%20%0D%0APreferred%20date%20and%20time%3A%20%0D%0A">Request a demo</a>
-            <a class="link hero-link" href="#contact">Send a message</a>
+            <a class="icon-pill hero-message" href="#contact" aria-label="Send a message" title="Send a message"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg></a>
           </div>
           <p class="hero-where">Based in Dasmariñas, Cavite. Working remotely.</p>
         </div>
@@ -99,14 +100,16 @@
           <h2 id="trusted-title">Trusted by</h2>
           <p class="trusted-sub">Companies I've worked with</p>
         </div>
-        <ul class="logos">
-          <li><img src="img/companies/coreproc.svg" width="72" height="72" alt="" loading="lazy"><span>CoreProc</span></li>
-          <li><img src="img/companies/cloudtech.png" width="200" height="77" alt="" loading="lazy"><span>CloudTech ERP</span></li>
-          <li><img src="img/companies/pcieerd.png" width="240" height="240" alt="" loading="lazy"><span>DOST-PCIEERD</span></li>
-          <li><img src="img/companies/psa.svg" width="120" height="120" alt="" loading="lazy"><span>Philippine Statistics Authority</span></li>
-          <li><img src="img/companies/pcu.png" width="240" height="238" alt="" loading="lazy"><span>Philippine Christian University</span></li>
-          <li><img src="img/companies/dinoland.webp" width="320" height="242" alt="" loading="lazy"><span>Dinoland</span></li>
-        </ul>
+        <div class="logo-marquee">
+          <ul class="logos">
+            <li><img src="img/companies/coreproc.svg" width="72" height="72" alt=""><span>CoreProc</span></li>
+            <li><img src="img/companies/cloudtech.png" width="200" height="77" alt=""><span>CloudTech ERP</span></li>
+            <li><img src="img/companies/pcieerd.png" width="240" height="240" alt=""><span>DOST-PCIEERD</span></li>
+            <li><img src="img/companies/psa.svg" width="120" height="120" alt=""><span>Philippine Statistics Authority</span></li>
+            <li><img src="img/companies/pcu.png" width="240" height="238" alt=""><span>Philippine Christian University</span></li>
+            <li><img src="img/companies/dinoland.webp" width="320" height="242" alt=""><span>Dinoland</span></li>
+          </ul>
+        </div>
       </div>
     </section>
 

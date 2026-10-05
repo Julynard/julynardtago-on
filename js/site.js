@@ -438,3 +438,124 @@ document.addEventListener('click', function (e) {
     button.classList.toggle('is-shown', !entries[0].isIntersecting);
   }).observe(hero);
 })();
+
+// Trusted by: loop the logos sideways. The copy is hidden from screen readers.
+(function () {
+  var marquee = document.querySelector('.logo-marquee');
+  if (!marquee || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var list = marquee.querySelector('.logos');
+  Array.prototype.slice.call(list.children).forEach(function (item) {
+    var copy = item.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    list.appendChild(copy);
+  });
+  marquee.classList.add('is-looping');
+})();
+
+// Ambient background: faint drifting particles with thin links between
+// neighbours, kept low-contrast so content stays easy to read.
+(function () {
+  var canvas = document.querySelector('.ambient');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var dots = [];
+  var pointer = { x: -9999, y: -9999 };
+  var width = 0;
+  var height = 0;
+  var rgb = '127,217,190';
+  var LINK = 120;
+
+  function readColor() {
+    var hex = getComputedStyle(document.documentElement).getPropertyValue('--ambient').trim().replace('#', '');
+    var n = parseInt(hex, 16);
+    if (!isNaN(n)) rgb = [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(',');
+  }
+
+  function build() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var count = Math.max(28, Math.min(110, Math.round(width * height / 15000)));
+    dots = [];
+    for (var i = 0; i < count; i++) {
+      dots.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: 0.6 + Math.random() * 1.4
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    for (var i = 0; i < dots.length; i++) {
+      var a = dots[i];
+      for (var j = i + 1; j < dots.length; j++) {
+        var b = dots[j];
+        var dx = a.x - b.x;
+        var dy = a.y - b.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK) {
+          ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.12 * (1 - d / LINK)).toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      var px = a.x - pointer.x;
+      var py = a.y - pointer.y;
+      var pd = Math.sqrt(px * px + py * py);
+      if (pd < LINK * 1.3) {
+        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.2 * (1 - pd / (LINK * 1.3))).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(pointer.x, pointer.y);
+        ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(' + rgb + ',.35)';
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function tick() {
+    for (var i = 0; i < dots.length; i++) {
+      var p = dots[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = width + 10; else if (p.x > width + 10) p.x = -10;
+      if (p.y < -10) p.y = height + 10; else if (p.y > height + 10) p.y = -10;
+    }
+    draw();
+    if (!still.matches) requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('pointermove', function (e) { pointer.x = e.clientX; pointer.y = e.clientY; }, { passive: true });
+  document.addEventListener('pointerleave', function () { pointer.x = pointer.y = -9999; });
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      // Mobile URL bars change only the height; keep the dots where they are then.
+      var keep = window.innerWidth === width ? dots : null;
+      build();
+      if (keep) dots = keep;
+      if (still.matches) draw();
+    }, 200);
+  });
+  document.addEventListener('themechange', function () { readColor(); if (still.matches) draw(); });
+
+  readColor();
+  build();
+  tick();
+})();
