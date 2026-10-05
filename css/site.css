@@ -11,6 +11,8 @@
   --pine-soft: #E3EEEA;
   --marker: #FFD84D;
   --marker-ink: #16201C;
+  --particle-a: #0B4438;
+  --particle-b: #7FD9BE;
 
   --sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -33,6 +35,8 @@
     --pine-soft: #1B2C27;
     --marker: rgba(255, 216, 77, .28);
     --marker-ink: #FFF3C4;
+    --particle-a: #1E6E5A;
+    --particle-b: #B8F2E0;
   }
 }
 
@@ -145,11 +149,11 @@ mark {
 }
 
 .brand {
-  font: 800 1.25rem/1 var(--sans);
-  text-decoration: none;
-  color: var(--pine);
-  padding: .5rem 0;
+  display: block;
+  padding: .25rem 0;
+  border-radius: 50%;
 }
+.brand img { width: 2.25rem; height: 2.25rem; }
 
 .topbar nav { margin-left: auto; }
 
@@ -178,7 +182,24 @@ mark {
 
 /* Hero */
 
-.hero { padding: clamp(3rem, 8vw, 6rem) 0 clamp(2.5rem, 6vw, 4rem); }
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(3rem, 8vw, 6rem) 0 clamp(2.5rem, 6vw, 4rem);
+}
+
+/* Particle "JLT" drawn by js/site.js against the right edge of the hero */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero > .wrap { position: relative; z-index: 1; }
+
+.hero-link { align-self: center; padding: .5rem .25rem; }
 
 .hero-grid {
   display: grid;
@@ -342,6 +363,53 @@ mark {
   html { scroll-behavior: auto; }
   .career-bar { animation: none; }
   .btn { transition: none; }
+}
+
+/* Trusted by */
+
+.trusted {
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.trusted h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
+.trusted-sub { margin: .375rem 0 0; color: var(--muted); }
+
+.logos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  align-items: start;
+}
+
+.logos li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .625rem;
+  text-align: center;
+}
+
+.logos img {
+  width: auto;
+  height: 4rem;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.logos span { font: 500 .8125rem/1.3 var(--sans); color: var(--muted); }
+
+@media (prefers-color-scheme: dark) {
+  /* several logos are dark ink on transparent, so give them a light plate */
+  .logos img { background: #FFFFFF; padding: .375rem; border-radius: 8px; box-sizing: content-box; height: 3.25rem; }
+}
+
+@media (max-width: 1000px) {
+  .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* Sections */
@@ -532,6 +600,14 @@ mark {
   font-weight: 700;
   text-underline-offset: .2em;
 }
+
+.demo {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--pine) 30%, transparent);
+  max-width: 22rem;
+}
+.demo h3 { font-size: 1.25rem; margin-bottom: .5rem; }
 
 .form { max-width: 36rem; }
 

@@ -11,7 +11,8 @@
   <meta property="og:image" content="https://julynardtago-on.netlify.app/img/julynard.png">
   <meta name="theme-color" content="#0F5A4A">
 
-  <link href="img/JLT.ico" rel="icon">
+  <link href="img/JLT.ico" rel="icon" sizes="any">
+  <link href="img/icon-192.png" rel="icon" type="image/png" sizes="192x192">
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +26,7 @@
 
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="brand" href="#top" aria-label="Julynard Tago-on, back to top">JLT</a>
+      <a class="brand" href="#top" aria-label="Julynard Tago-on, back to top"><img src="img/icon-192.png" width="36" height="36" alt=""></a>
       <nav aria-label="Sections">
         <ul class="nav">
           <li><a href="#about">About</a></li>
@@ -42,6 +43,7 @@
   <main id="main">
 
     <section class="hero" id="top">
+      <canvas class="hero-particles" aria-hidden="true"></canvas>
       <div class="wrap hero-grid">
         <div class="hero-text">
           <h1>Julynard Tago&#8209;on</h1>
@@ -49,7 +51,8 @@
           <p class="hero-lede">I build and look after web applications for retail loyalty, field sales, payments and SaaS teams, from the design spec through to production.</p>
           <div class="hero-actions">
             <a class="btn" href="files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Download resume</a>
-            <a class="btn btn-ghost" href="#contact">Get in touch</a>
+            <a class="btn btn-ghost" href="mailto:tagoonjulynard@gmail.com?subject=Demo%20request&amp;body=Hi%20Julynard%2C%0D%0A%0D%0AI%27d%20like%20a%20demo.%0D%0A%0D%0AWhat%20I%27d%20like%20to%20see%3A%20%0D%0ACompany%3A%20%0D%0APreferred%20date%20and%20time%3A%20%0D%0A">Request a demo</a>
+            <a class="link hero-link" href="#contact">Send a message</a>
           </div>
           <p class="hero-where">Based in Dasmariñas, Cavite. Working remotely.</p>
         </div>
@@ -66,11 +69,28 @@
             <li style="--s:10;--e:14"><a href="#exp-pcu"><span class="career-name">Philippine Christian University</span><span class="career-dates">Nov 2020 to Mar 2021</span></a><span class="career-bar"></span></li>
             <li style="--s:14;--e:22"><a href="#exp-psa"><span class="career-name">Philippine Statistics Authority</span><span class="career-dates">Mar 2021 to Nov 2021</span></a><span class="career-bar"></span></li>
             <li style="--s:22;--e:34"><a href="#exp-dost"><span class="career-name">DOST-PCIEERD</span><span class="career-dates">Nov 2021 to Nov 2022</span></a><span class="career-bar"></span></li>
-            <li style="--s:34;--e:45"><a href="#exp-cloutech"><span class="career-name">Cloutech ERP</span><span class="career-dates">Oct 2022 to Oct 2023</span></a><span class="career-bar"></span></li>
+            <li style="--s:34;--e:45"><a href="#exp-cloudtech"><span class="career-name">CloudTech ERP</span><span class="career-dates">Oct 2022 to Oct 2023</span></a><span class="career-bar"></span></li>
             <li style="--s:45;--e:49"><a href="#exp-dinoland"><span class="career-name">Dinoland</span><span class="career-dates">Oct 2023 to Feb 2024</span></a><span class="career-bar"></span></li>
             <li class="is-now" style="--s:49;--e:82"><a href="#exp-coreproc"><span class="career-name">CoreProc Inc.</span><span class="career-dates">Feb 2024 to present</span></a><span class="career-bar"></span></li>
           </ol>
         </figure>
+      </div>
+    </section>
+
+    <section class="trusted" aria-labelledby="trusted-title">
+      <div class="wrap split">
+        <div>
+          <h2 id="trusted-title">Trusted by</h2>
+          <p class="trusted-sub">Companies I've worked with</p>
+        </div>
+        <ul class="logos">
+          <li><img src="img/companies/coreproc.svg" width="72" height="72" alt="" loading="lazy"><span>CoreProc</span></li>
+          <li><img src="img/companies/cloudtech.png" width="200" height="77" alt="" loading="lazy"><span>CloudTech ERP</span></li>
+          <li><img src="img/companies/pcieerd.png" width="240" height="240" alt="" loading="lazy"><span>DOST-PCIEERD</span></li>
+          <li><img src="img/companies/psa.svg" width="120" height="120" alt="" loading="lazy"><span>Philippine Statistics Authority</span></li>
+          <li><img src="img/companies/pcu.png" width="240" height="238" alt="" loading="lazy"><span>Philippine Christian University</span></li>
+          <li><img src="img/companies/dinoland.webp" width="320" height="242" alt="" loading="lazy"><span>Dinoland</span></li>
+        </ul>
       </div>
     </section>
 
@@ -156,10 +176,10 @@
               </ul>
             </div>
           </li>
-          <li id="exp-cloutech">
+          <li id="exp-cloudtech">
             <p class="when">Oct 2022 to Oct 2023<br>Makati City, hybrid</p>
             <div>
-              <h3>Cloutech ERP</h3>
+              <h3>CloudTech ERP</h3>
               <p class="title">Technical Consultant</p>
               <ul>
                 <li>Built custom NetSuite features in SuiteScript 1.0 and 2.0, including templated check printing for invoices and accounts receivable, making clients' payment processing <mark>50% more efficient</mark>.</li>
@@ -254,6 +274,11 @@
             <li><a href="https://github.com/Julynard" target="_blank" rel="noopener">GitHub</a></li>
             <li><a href="https://www.facebook.com/julynard10" target="_blank" rel="noopener">Facebook</a></li>
           </ul>
+          <div class="demo">
+            <h3>Request a demo</h3>
+            <p>Want to see a system I've built? Email me and I'll set up a walkthrough.</p>
+            <a class="btn" href="mailto:tagoonjulynard@gmail.com?subject=Demo%20request&amp;body=Hi%20Julynard%2C%0D%0A%0D%0AI%27d%20like%20a%20demo.%0D%0A%0D%0AWhat%20I%27d%20like%20to%20see%3A%20%0D%0ACompany%3A%20%0D%0APreferred%20date%20and%20time%3A%20%0D%0A">Email a demo request</a>
+          </div>
         </div>
 
         <form class="form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
