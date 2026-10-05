@@ -391,3 +391,40 @@ document.addEventListener('click', function (e) {
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start);
 })();
+
+// Experience: lists longer than three bullets fold, with a toggle after the
+// last bullet. Without JavaScript every bullet simply shows.
+(function () {
+  var VISIBLE = 3;
+  document.querySelectorAll('.jobs > li ul').forEach(function (list, i) {
+    var extra = Array.prototype.slice.call(list.children, VISIBLE);
+    if (!extra.length) return;
+
+    list.id = list.id || 'job-bullets-' + i;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'more-toggle';
+    button.setAttribute('aria-controls', list.id);
+    list.insertAdjacentElement('afterend', button);
+
+    function set(open) {
+      extra.forEach(function (li) {
+        li.classList.toggle('is-folded', !open);
+        li.classList.toggle('is-revealed', open);
+      });
+      button.setAttribute('aria-expanded', String(open));
+      button.textContent = open ? 'Show less' : 'Show ' + extra.length + ' more';
+    }
+
+    button.addEventListener('click', function () {
+      var open = button.getAttribute('aria-expanded') !== 'true';
+      set(open);
+      if (open) {
+        // Move focus to the first revealed bullet for keyboard and screen reader users.
+        extra[0].setAttribute('tabindex', '-1');
+        extra[0].focus({ preventScroll: true });
+      }
+    });
+    set(false);
+  });
+})();
