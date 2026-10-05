@@ -165,56 +165,54 @@
     <section class="section" id="side-projects" aria-labelledby="side-title">
       <div class="wrap split">
         <h2 id="side-title">Side projects</h2>
-        <div>
-          <p class="note">Personal projects I'm building in public, each based on a problem I've solved at work. Links go up here as each one ships.</p>
-          <ul class="projects">
-            <li>
-              <h3>Payout Reconciler</h3>
+        <div class="scroller">
+          <div class="scroller-head">
+            <p class="note">Personal projects, each based on a problem I've solved at work. Swipe or use the arrows to see more.</p>
+            <div class="scroller-buttons">
+              <button class="scroller-btn" type="button" data-dir="-1" aria-label="Previous projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <button class="scroller-btn" type="button" data-dir="1" aria-label="Next projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+          </div>
+          <ul class="side-track" tabindex="0" aria-label="Side projects, scrolls sideways">
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="Payout Reconciler on GitHub">Payout Reconciler <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Matches e-wallet exports, kiosk cash files over SFTP and app orders against a ledger, then flags what's missing or mismatched.</p>
               <p class="meta"><span class="role">Based on the payments reconciliation system I led at CoreProc.</span> <span class="stack">Laravel, Nova, scheduled jobs, SFTP</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>FieldTrack</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="FieldTrack on GitHub">FieldTrack <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Multi-tenant app for field sales reps: store visits, GPS check-ins, offline sync and a supervisor dashboard by district.</p>
               <p class="meta"><span class="role">Based on the field-sales platform and multi-district sync work.</span> <span class="stack">Laravel, Vue 3 PWA, MySQL, Redis</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>Laravel Export Kit</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="Laravel Export Kit on GitHub">Laravel Export Kit <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Open-source package for large exports: queued, chunked jobs streamed to S3 or CSV, with an N+1 query detector.</p>
               <p class="meta"><span class="role">Based on fixing timeouts across 26 BI export processors.</span> <span class="stack">Laravel package, Horizon, S3, MinIO</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>TeamCredits SaaS Starter</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="TeamCredits SaaS Starter on GitHub">TeamCredits SaaS Starter <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>A starting point for SaaS apps with Google sign-in, PayPal subscriptions, team invites and a shared credit balance.</p>
               <p class="meta"><span class="role">Based on the team-collaboration SaaS.</span> <span class="stack">Laravel, Inertia.js, Vue 3, PayPal</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>TicketGate</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="TicketGate on GitHub">TicketGate <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Ticketing and QR check-in for attractions and events, with purchase orders, daily revenue reports and an audit trail.</p>
               <p class="meta"><span class="role">Based on the Dinoland ticket system and PCU QR attendance.</span> <span class="stack">Laravel, Vue, QR scanning</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>ApprovalFlow</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="ApprovalFlow on GitHub">ApprovalFlow <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>A configurable multi-step approval engine for expense requests, with email notifications and overdue alerts.</p>
               <p class="meta"><span class="role">Based on the DOST-PCIEERD expense approval workflow.</span> <span class="stack">Laravel, Livewire</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>Live Quiz Scoreboard</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="Live Quiz Scoreboard on GitHub">Live Quiz Scoreboard <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Real-time quiz competitions: a host screen, contestants on their phones, live scoring and a lag indicator per player.</p>
               <p class="meta"><span class="role">Based on the PSA science quiz bee system.</span> <span class="stack">Laravel Reverb, Vue 3</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
-            <li>
-              <h3>Claude Code Skills for Laravel Teams</h3>
+            <li class="side-card">
+              <h3><a class="repo-link" href="#" aria-label="Claude Code Skills for Laravel Teams on GitHub">Claude Code Skills for Laravel Teams <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></h3>
               <p>Public versions of the skills I use daily: PR drafting, ERD generation from migrations and tenant schema drift repair.</p>
               <p class="meta"><span class="role">Based on my own AI-assisted workflow.</span> <span class="stack">Claude Code skills, Bash, PHP</span></p>
-              <p class="status"><span class="tag">In progress</span></p>
             </li>
           </ul>
         </div>
@@ -390,6 +388,7 @@
     </div>
   </footer>
 
+  <script src="js/vendor/lenis.min.js" defer></script>
   <script src="js/site.js" defer></script>
 </body>
 </html>

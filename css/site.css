@@ -42,7 +42,18 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  scrollbar-width: none; /* page still scrolls, the bar is just hidden */
+}
+html::-webkit-scrollbar { display: none; }
+
+/* Lenis (js/vendor/lenis.min.js) drives smooth scrolling when it's running */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
 
 body {
   margin: 0;
@@ -431,7 +442,7 @@ mark {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html, .side-track { scroll-behavior: auto; }
   .career-bar { animation: none; }
   .btn { transition: none; }
 }
@@ -573,15 +584,82 @@ mark {
   .shots { grid-template-columns: minmax(0, 1fr); }
 }
 
-.status { margin: .75rem 0 0; }
+/* Side projects: a sideways scroller of cards */
 
-.tag {
-  display: inline-block;
-  padding: .25rem .625rem;
+.scroller { min-width: 0; }
+
+.scroller-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.scroller-head .note { margin: 0; }
+
+.scroller-buttons { display: flex; gap: .5rem; flex: none; }
+
+.scroller-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  font: 500 .8125rem/1.3 var(--sans);
-  color: var(--muted);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color .2s ease, opacity .2s ease;
+}
+.scroller-btn:hover:not(:disabled) { background: var(--pine-soft); }
+.scroller-btn:disabled { opacity: .4; cursor: default; }
+.scroller-btn svg { width: 1.25rem; height: 1.25rem; }
+
+.side-track {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0 0 .25rem;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.side-track::-webkit-scrollbar { display: none; }
+.side-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
+
+.side-card {
+  flex: 0 0 min(21rem, 85%);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  scroll-snap-align: start;
+}
+.side-card h3 { font-size: 1.25rem; margin-bottom: .625rem; }
+.side-card > p:not(.meta) { font-size: 1.0625rem; }
+.side-card .meta { margin: auto 0 0; padding-top: .5rem; }
+
+.repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.repo-link:hover { color: var(--pine); text-decoration: underline; text-underline-offset: .2em; }
+.repo-link .gh { width: 1.1rem; height: 1.1rem; flex: none; color: var(--muted); }
+.repo-link:hover .gh { color: var(--pine); }
+
+@media (max-width: 640px) {
+  .scroller-head { flex-direction: column; align-items: flex-start; }
 }
 
 /* Experience */

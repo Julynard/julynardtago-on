@@ -249,3 +249,84 @@
     : Promise.resolve();
   fontsReady.then(reset, reset);
 })();
+
+// Smooth page scrolling (Lenis). Skipped when the visitor prefers reduced motion.
+(function () {
+  if (!window.Lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  new window.Lenis({ autoRaf: true, anchors: true });
+})();
+
+// Repo links without a URL yet: clickable, but they don't jump the page.
+document.addEventListener('click', function (e) {
+  var link = e.target.closest && e.target.closest('a.repo-link[href="#"]');
+  if (link) e.preventDefault();
+});
+
+// Side projects scroller: arrow buttons, and drag to scroll with a mouse.
+(function () {
+  var track = document.querySelector('.side-track');
+  if (!track) return;
+  var buttons = document.querySelectorAll('.scroller-btn');
+
+  function cardStep() {
+    var card = track.querySelector('.side-card');
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+    return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+  }
+
+  function updateButtons() {
+    var max = track.scrollWidth - track.clientWidth - 2;
+    buttons.forEach(function (b) {
+      b.disabled = b.dataset.dir === '-1' ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+    });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      track.scrollBy({ left: cardStep() * Number(b.dataset.dir), behavior: 'smooth' });
+    });
+  });
+  track.addEventListener('scroll', updateButtons, { passive: true });
+  window.addEventListener('resize', updateButtons);
+  updateButtons();
+
+  var startX = 0;
+  var startLeft = 0;
+  var dragging = false;
+  var moved = false;
+
+  track.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragging = true;
+    moved = false;
+    startX = e.clientX;
+    startLeft = track.scrollLeft;
+  });
+
+  window.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 5) {
+      moved = true;
+      track.classList.add('is-dragging');
+    }
+    if (moved) track.scrollLeft = startLeft - dx;
+  });
+
+  window.addEventListener('pointerup', function () {
+    if (!dragging) return;
+    dragging = false;
+    if (!moved) return;
+    // Let snapping settle on the nearest card after a drag.
+    var left = track.scrollLeft;
+    track.classList.remove('is-dragging');
+    track.scrollLeft = left;
+    var step = cardStep();
+    track.scrollTo({ left: Math.round(left / step) * step, behavior: 'smooth' });
+  });
+
+  // A drag shouldn't count as a click on a card's link.
+  track.addEventListener('click', function (e) {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+})();
