@@ -262,37 +262,95 @@ document.addEventListener('click', function (e) {
   if (link) e.preventDefault();
 });
 
-// Side projects scroller: arrow buttons, and drag to scroll with a mouse.
+// Projects scroller: loops forever, cards drifting in from the left.
+// Hover, focus, dragging or the arrows pause it; reduced motion stops it.
 (function () {
   var track = document.querySelector('.side-track');
   if (!track) return;
   var buttons = document.querySelectorAll('.scroller-btn');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var SPEED = 32; // px per second
 
-  function cardStep() {
-    var card = track.querySelector('.side-card');
-    var gap = parseFloat(getComputedStyle(track).columnGap) || 16;
-    return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+  // Second copy of the cards makes the loop seamless. Copies are hidden from
+  // screen readers and keyboard focus.
+  var originals = Array.prototype.slice.call(track.children);
+  originals.forEach(function (card) {
+    var copy = card.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    copy.setAttribute('inert', '');
+    copy.querySelectorAll('a, button').forEach(function (el) { el.setAttribute('tabindex', '-1'); });
+    track.appendChild(copy);
+  });
+
+  var loop = 0;      // width of one full set of cards
+  var pos = 0;       // fractional scroll position we drive
+  var hovering = false;
+  var focused = false;
+  var dragging = false;
+  var visible = true;
+  var pausedUntil = 0;
+  var last = 0;
+
+  function measure() {
+    loop = track.children[originals.length].offsetLeft - track.children[0].offsetLeft;
   }
 
-  function updateButtons() {
-    var max = track.scrollWidth - track.clientWidth - 2;
-    buttons.forEach(function (b) {
-      b.disabled = b.dataset.dir === '-1' ? track.scrollLeft <= 2 : track.scrollLeft >= max;
-    });
+  function wrap() {
+    // Stay inside the middle of the doubled strip so either direction loops.
+    if (track.scrollLeft < 1) track.scrollLeft += loop;
+    else if (track.scrollLeft >= loop * 2 - track.clientWidth - 1) track.scrollLeft -= loop;
+  }
+
+  function cardStep() {
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+    return originals[0].getBoundingClientRect().width + gap;
+  }
+
+  function pauseFor(ms) { pausedUntil = performance.now() + ms; }
+
+  function frame(now) {
+    var dt = last ? Math.min(now - last, 64) / 1000 : 0;
+    last = now;
+    var moving = !still.matches && visible && !hovering && !focused && !dragging && now > pausedUntil;
+    if (moving && loop) {
+      if (Math.abs(track.scrollLeft - pos) > 2) pos = track.scrollLeft; // someone else scrolled
+      pos -= SPEED * dt; // content moves right
+      if (pos < 1) pos += loop;
+      track.scrollLeft = pos;
+    } else {
+      pos = track.scrollLeft;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    measure();
+    track.scrollLeft = loop; // begin on the copy so there's room to drift right
+    pos = track.scrollLeft;
+    requestAnimationFrame(frame);
+  }
+
+  track.addEventListener('scroll', function () { if (!dragging) wrap(); }, { passive: true });
+  track.addEventListener('mouseenter', function () { hovering = true; });
+  track.addEventListener('mouseleave', function () { hovering = false; });
+  track.addEventListener('focusin', function () { focused = true; });
+  track.addEventListener('focusout', function () { focused = false; });
+  window.addEventListener('resize', function () { measure(); wrap(); });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(track);
   }
 
   buttons.forEach(function (b) {
     b.addEventListener('click', function () {
-      track.scrollBy({ left: cardStep() * Number(b.dataset.dir), behavior: 'smooth' });
+      pauseFor(2500);
+      track.scrollBy({ left: cardStep() * Number(b.dataset.dir), behavior: still.matches ? 'auto' : 'smooth' });
     });
   });
-  track.addEventListener('scroll', updateButtons, { passive: true });
-  window.addEventListener('resize', updateButtons);
-  updateButtons();
 
+  // Drag to scroll with a mouse; touch and trackpads scroll natively.
   var startX = 0;
   var startLeft = 0;
-  var dragging = false;
   var moved = false;
 
   track.addEventListener('pointerdown', function (e) {
@@ -310,23 +368,26 @@ document.addEventListener('click', function (e) {
       moved = true;
       track.classList.add('is-dragging');
     }
-    if (moved) track.scrollLeft = startLeft - dx;
+    if (!moved) return;
+    var left = startLeft - dx;
+    // Loop while dragging too, keeping the grab point under the pointer.
+    if (left < 1) { left += loop; startLeft += loop; }
+    else if (left >= loop * 2 - track.clientWidth - 1) { left -= loop; startLeft -= loop; }
+    track.scrollLeft = left;
   });
 
   window.addEventListener('pointerup', function () {
     if (!dragging) return;
     dragging = false;
-    if (!moved) return;
-    // Let snapping settle on the nearest card after a drag.
-    var left = track.scrollLeft;
     track.classList.remove('is-dragging');
-    track.scrollLeft = left;
-    var step = cardStep();
-    track.scrollTo({ left: Math.round(left / step) * step, behavior: 'smooth' });
+    pauseFor(1500);
   });
 
   // A drag shouldn't count as a click on a card's link.
   track.addEventListener('click', function (e) {
     if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
   }, true);
+
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start);
 })();
