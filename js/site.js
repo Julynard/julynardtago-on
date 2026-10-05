@@ -1,3 +1,25 @@
+// Light/dark switch. Dark is the default; the choice is remembered.
+(function () {
+  var root = document.documentElement;
+  var button = document.querySelector('.theme-toggle');
+  var meta = document.querySelector('meta[name="theme-color"]');
+
+  function apply(theme) {
+    root.setAttribute('data-theme', theme);
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0F1513' : '#F5F7F4');
+    if (button) button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    document.dispatchEvent(new CustomEvent('themechange'));
+  }
+
+  apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+  if (button) button.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+})();
+
 // Highlight the nav link for the section in view.
 (function () {
   var links = document.querySelectorAll('.nav a');
@@ -69,7 +91,6 @@
 
   var ctx = canvas.getContext('2d');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var dark = window.matchMedia('(prefers-color-scheme: dark)');
   var particles = [];
   var pointer = { x: -9999, y: -9999 };
   var running = false;
@@ -220,9 +241,8 @@
       if (hero.clientWidth !== width) reset();
     }, 200);
   });
-  [still, dark].forEach(function (query) {
-    if (query.addEventListener) query.addEventListener('change', reset);
-  });
+  if (still.addEventListener) still.addEventListener('change', reset);
+  document.addEventListener('themechange', function () { if (width) reset(); });
 
   var fontsReady = document.fonts && document.fonts.load
     ? document.fonts.load('800 100px "Schibsted Grotesk"')
