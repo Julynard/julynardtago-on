@@ -33,8 +33,8 @@
   --pine: #5CC2A6;
   --pine-ink: #0F1513;
   --pine-soft: #1B2C27;
-  --marker: rgba(255, 216, 77, .28);
-  --marker-ink: #FFF3C4;
+  --marker: rgba(255, 216, 77, .42);
+  --marker-ink: #FFF6D6;
   --particle-a: #1E6E5A;
   --particle-b: #B8F2E0;
   color-scheme: dark;
@@ -79,7 +79,7 @@ p { margin: 0 0 1em; }
 
 mark {
   background: linear-gradient(transparent 55%, var(--marker) 55%);
-  color: inherit;
+  color: var(--marker-ink);
   padding: 0 .1em;
 }
 
@@ -672,6 +672,50 @@ mark {
 .jobs ul { margin: 0; padding-left: 1.1rem; max-width: 40em; list-style: disc; }
 .jobs ul li { margin-bottom: .5rem; }
 .jobs ul li::marker { color: var(--pine); }
+.jobs mark { font-weight: 600; }
+
+/* Long bullet lists fold after three; the rest sit in a <details> toggle */
+.more { max-width: 40em; }
+.more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-height: 2.75rem;
+  margin-left: 1.1rem;
+  font: 700 .9375rem/1 var(--sans);
+  color: var(--pine);
+  cursor: pointer;
+  list-style: none;
+}
+.more summary::-webkit-details-marker { display: none; }
+.more summary::after {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .2s ease;
+}
+.more[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+.more summary:hover { text-decoration: underline; text-underline-offset: .2em; }
+.more-open, .more[open] .more-closed { display: none; }
+.more[open] .more-open { display: inline; }
+.more ul { margin-top: .25rem; }
+
+/* Smooth open and close where the browser supports animating details */
+@supports selector(::details-content) {
+  .more { interpolate-size: allow-keywords; }
+  .more::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size .3s ease, content-visibility .3s allow-discrete;
+  }
+  .more[open]::details-content { block-size: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .more::details-content, .more summary::after { transition: none; }
+}
 
 @media (max-width: 640px) {
   .jobs > li { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
