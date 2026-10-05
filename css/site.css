@@ -792,19 +792,27 @@ mark {
 
 .contact-lede { margin-top: 1rem; max-width: 22em; }
 
-.contact-list {
-  list-style: none;
+.contact-icons {
+  display: flex;
+  gap: .5rem;
   margin: 1.5rem 0 0;
   padding: 0;
-  font: 500 1rem/1 var(--sans);
+  list-style: none;
 }
-.contact-list a {
-  display: inline-block;
-  padding: .625rem 0;
-  color: var(--pine);
-  font-weight: 700;
-  text-underline-offset: .2em;
+
+.icon-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--pine);
+  color: var(--pine-ink);
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
 }
+.icon-pill svg { width: 1.125rem; height: 1.125rem; }
+.icon-pill:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
 
 .demo {
   margin-top: 2rem;
@@ -843,6 +851,35 @@ mark {
 .form-status.is-error { color: #B3261E; }
 
 [data-theme="dark"] .form-status.is-error { color: #F2B8B5; }
+
+/* Floating back-to-top button, shown once the hero is out of view */
+.to-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--pine);
+  color: var(--pine-ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity .25s ease, transform .25s ease, visibility .25s;
+}
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: var(--ink); color: var(--paper); }
+.to-top svg { width: 1.25rem; height: 1.25rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .to-top, .icon-pill { transition: none; }
+  .icon-pill:hover { transform: none; }
+}
 
 /* Footer */
 

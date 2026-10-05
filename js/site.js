@@ -428,3 +428,13 @@ document.addEventListener('click', function (e) {
     set(false);
   });
 })();
+
+// Floating back-to-top button: appears once the hero has scrolled away.
+(function () {
+  var button = document.querySelector('.to-top');
+  var hero = document.querySelector('.hero');
+  if (!button || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    button.classList.toggle('is-shown', !entries[0].isIntersecting);
+  }).observe(hero);
+})();
