@@ -344,10 +344,12 @@ mark {
   transform: translateX(-50%);
 }
 
-/* Default photo in dark mode, the sunglasses one in light mode */
-.portrait-light { display: none; }
-:root:not([data-theme="dark"]) .portrait-light { display: block; }
-:root:not([data-theme="dark"]) .portrait-dark { display: none; }
+/* Default photo in dark mode, the sunglasses one in light mode. Both stay
+   rendered and crossfade, so the switch never shows an empty frame. */
+.portrait-clip img { transition: opacity .4s ease, visibility .4s; }
+.portrait-light { opacity: 0; visibility: hidden; }
+:root:not([data-theme="dark"]) .portrait-light { opacity: 1; visibility: visible; }
+:root:not([data-theme="dark"]) .portrait-dark { opacity: 0; visibility: hidden; }
 
 @media (max-width: 640px) {
   .hero-grid { grid-template-columns: 1fr; }
@@ -460,7 +462,7 @@ mark {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .career-bar { animation: none; }
-  .btn { transition: none; }
+  .btn, .portrait-clip img { transition: none; }
 }
 
 /* Trusted by */
