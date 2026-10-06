@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fixing N+1 Queries and Timeouts in Laravel Exports | Julynard Tago-on</title>
+  <meta name="description" content="A Laravel performance case study: finding N+1 queries in data exports, fixing them with eager loading and chunking, and moving long exports onto queued jobs.">
+  <meta name="author" content="Julynard Tago-on">
+  <link rel="canonical" href="https://julynardtago-on.netlify.app/articles/fixing-n-plus-one-queries-in-laravel-exports/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Julynard Tago-on">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://julynardtago-on.netlify.app/articles/fixing-n-plus-one-queries-in-laravel-exports/">
+  <meta property="og:title" content="Fixing N+1 queries and timeouts in Laravel exports">
+  <meta property="og:description" content="A Laravel performance case study: finding N+1 queries in data exports, fixing them with eager loading and chunking, and moving long exports onto queued jobs.">
+  <meta property="og:image" content="https://julynardtago-on.netlify.app/img/julynard-2026.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:alt" content="Portrait of Julynard Tago-on">
+  <meta property="article:published_time" content="2026-10-06">
+  <meta property="article:modified_time" content="2026-10-06">
+  <meta property="article:author" content="https://julynardtago-on.netlify.app/">
+  <meta property="article:tag" content="Laravel">
+  <meta property="article:tag" content="Performance">
+  <meta property="article:tag" content="Eloquent">
+  <meta property="article:tag" content="Queues">
+  <meta property="article:tag" content="MySQL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Fixing N+1 queries and timeouts in Laravel exports">
+  <meta name="twitter:description" content="A Laravel performance case study: finding N+1 queries in data exports, fixing them with eager loading and chunking, and moving long exports onto queued jobs.">
+  <meta name="twitter:image" content="https://julynardtago-on.netlify.app/img/julynard-2026.jpg">
+  <meta name="theme-color" content="#0F1513">
+  <script>
+    // Apply a saved theme before first paint. Dark is the default.
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
+    } catch (e) {}
+  </script>
+
+  <link href="/img/JLT.ico" rel="icon" sizes="any">
+  <link href="/img/icon-192.png" rel="icon" type="image/png" sizes="192x192">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="/css/site.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://julynardtago-on.netlify.app/articles/fixing-n-plus-one-queries-in-laravel-exports/#article",
+        "mainEntityOfPage": "https://julynardtago-on.netlify.app/articles/fixing-n-plus-one-queries-in-laravel-exports/",
+        "headline": "Fixing N+1 queries and timeouts in Laravel exports",
+        "description": "A Laravel performance case study: finding N+1 queries in data exports, fixing them with eager loading and chunking, and moving long exports onto queued jobs.",
+        "image": "https://julynardtago-on.netlify.app/img/julynard-2026.jpg",
+        "datePublished": "2026-10-06",
+        "dateModified": "2026-10-06",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "@id": "https://julynardtago-on.netlify.app/#person",
+          "name": "Julynard Tago-on",
+          "url": "https://julynardtago-on.netlify.app/",
+          "jobTitle": "Laravel / PHP Full-Stack Engineer",
+          "sameAs": [
+            "https://github.com/Julynard",
+            "https://www.linkedin.com/in/julynard-tago-on/"
+          ]
+        },
+        "publisher": {
+          "@id": "https://julynardtago-on.netlify.app/#person"
+        },
+        "about": [
+          "Laravel",
+          "Database performance",
+          "N+1 query problem",
+          "Laravel queues"
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://julynardtago-on.netlify.app/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Writing",
+            "item": "https://julynardtago-on.netlify.app/articles/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Fixing N+1 queries and timeouts in Laravel exports"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <canvas class="ambient" aria-hidden="true"></canvas>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/" aria-label="Julynard Tago-on, home"><img src="/img/icon-192.png" width="36" height="36" alt=""></a>
+      <nav aria-label="Site">
+        <ul class="nav">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/projects/">Projects</a></li>
+          <li><a href="/#experience">Experience</a></li>
+          <li><a href="/articles/" aria-current="page">Writing</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn btn-small" href="/files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Resume PDF</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="page">
+      <div class="wrap page-wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/articles/">Writing</a></li>
+          <li aria-current="page">Fixing N+1 queries and timeouts in Laravel exports</li>
+          </ol>
+        </nav>
+        <header class="page-head">
+          <p class="kind">Case study, Laravel performance</p>
+          <h1>Fixing N+1 queries and timeouts in Laravel exports</h1>
+          <p class="page-lede">On a multi-tenant field-sales platform at CoreProc, I eliminated N+1 queries across 26 BI export processors and resolved export timeouts by moving the work onto queued, chunked jobs. This is how I find and fix that kind of problem.</p>
+          <p class="byline">By <a href="/" rel="author">Julynard Tago-on</a>, Laravel / PHP Full-Stack Engineer. Published <time datetime="2026-10-06">6 October 2026</time>.</p>
+        </header>
+
+        <div class="article-body">
+          <div class="callout">
+            <p>The platform's code is private, and I don't have before-and-after timings from it that I can publish, so there are no benchmark numbers here. The code samples are illustrative, with invented model names, not client code.</p>
+          </div>
+
+          <h2>The situation</h2>
+          <p>The platform holds per-tenant activity data for field sales teams at a multinational FMCG client, and exports it every night to S3 for Power BI. There were 26 export processors, and as the data grew, exports started timing out. I eliminated the N+1 queries across all 26 processors and moved the long-running exports onto queued, chunked jobs.</p>
+
+          <h2>Why exports are where N+1 hides</h2>
+          <p>Export code nearly always loops over rows and reads a relationship or two for each one. With Eloquent's lazy loading, each of those reads is a separate query:</p>
+          <pre><code>// Illustrative. One query for the orders, then more for every row.
+$orders = Order::query()
+    -&gt;whereBetween('created_at', [$from, $to])
+    -&gt;get();
+
+foreach ($orders as $order) {
+    $writer-&gt;addRow([
+        $order-&gt;customer-&gt;name,          // 1 query per row
+        $order-&gt;branch-&gt;region-&gt;name,    // 2 more per row
+        $order-&gt;items-&gt;sum('quantity'),  // and another
+    ]);
+}</code></pre>
+          <p>With 20 rows in a local database this is instant. With a tenant's full history it's tens of thousands of queries in one process. Exports also run at night, when nobody is watching the slow query log.</p>
+
+          <h2>Finding them</h2>
+          <ul>
+            <li><strong>Make lazy loading fail outside production.</strong> One line in <code>AppServiceProvider::boot()</code> turns every accidental lazy load into an exception in local and CI runs:
+              <pre><code>Model::preventLazyLoading(! app()-&gt;isProduction());</code></pre>
+            </li>
+            <li><strong>Count the queries per run.</strong> Wrapping an export in <code>DB::enableQueryLog()</code>, or counting with <code>DB::listen()</code>, shows straight away whether the count grows with the number of rows. It should stay flat.</li>
+            <li><strong>Look for repeated SQL.</strong> The same statement with only the ID changing, hundreds of times, is the signature of an N+1.</li>
+          </ul>
+
+          <h2>Fixing the queries</h2>
+          <p>The fix is to load each relationship once for the whole set, and to ask the database for aggregates instead of loading collections to count in PHP:</p>
+          <pre><code>// Illustrative. A fixed number of queries, whatever the row count.
+Order::query()
+    -&gt;whereBetween('created_at', [$from, $to])
+    -&gt;with(['customer:id,name', 'branch:id,region_id', 'branch.region:id,name'])
+    -&gt;withSum('items', 'quantity')
+    -&gt;chunkById(1000, function ($orders) use ($writer) {
+        foreach ($orders as $order) {
+            $writer-&gt;addRow([
+                $order-&gt;customer-&gt;name,
+                $order-&gt;branch-&gt;region-&gt;name,
+                $order-&gt;items_sum_quantity,
+            ]);
+        }
+    });</code></pre>
+          <ul>
+            <li><code>with()</code> loads each relationship in one <code>WHERE IN</code> query per chunk.</li>
+            <li>Column lists such as <code>customer:id,name</code> keep the loaded models small. The foreign key has to be in the list, or the relationship can't be matched.</li>
+            <li><code>withSum()</code> and <code>withCount()</code> push aggregation into SQL.</li>
+            <li><code>chunkById()</code> pages by primary key, so memory stays flat. Unlike offset-based <code>chunk()</code>, it doesn't skip rows if the data changes during the run.</li>
+          </ul>
+
+          <h2>Fixing the timeouts</h2>
+          <p>Removing N+1 queries makes each export much cheaper, but a large tenant's export can still outlast a single process's time limit. That's why the second half of the fix was structural: queued, chunked jobs.</p>
+          <ul>
+            <li><strong>Split the export.</strong> Instead of one long process, dispatch a job per chunk (by ID range or by date range) and combine the parts at the end. Laravel's job batching gives a completion callback for the combine step.</li>
+            <li><strong>Carry context explicitly.</strong> In a multi-tenant system each job needs its tenant passed in, never taken from global state left over from a previous job.</li>
+            <li><strong>Stream the output.</strong> Write rows to a file or stream as you go and upload it, rather than building the whole export in memory.</li>
+            <li><strong>Set limits deliberately.</strong> A job's <code>$timeout</code> should be shorter than the queue connection's <code>retry_after</code>, or a slow job can be picked up twice. Horizon shows which jobs are slow or failing.</li>
+          </ul>
+
+          <h2>Don't forget the indexes</h2>
+          <p>Eager loading moves the work into <code>WHERE id IN (...)</code> queries on foreign keys, and date-range filters need an index on the date column. Running <code>EXPLAIN</code> on the queries an export actually issues is the quickest way to spot a full table scan.</p>
+          <p>Indexes have limits worth knowing. In my public <a href="/projects/laravel-user-management-api/">Laravel User Management API</a>, search uses <code>LIKE '%term%'</code> on indexed name columns. Because the pattern starts with a wildcard, MySQL can't use those indexes to seek. At that project's size it doesn't matter; on a large table, prefix matching or a full-text index would.</p>
+
+          <h2>Measure, then measure again</h2>
+          <p>For each export I want three numbers before and after a change: query count, duration and peak memory. Logging them on every run turns "the exports feel slow" into a trend you can watch, and shows quickly when a new column brings an N+1 back.</p>
+
+          <h2>Checklist</h2>
+          <ul>
+            <li><code>Model::preventLazyLoading()</code> enabled outside production.</li>
+            <li>Query count per export independent of row count.</li>
+            <li>Relationships eager-loaded with column lists; aggregates done in SQL.</li>
+            <li><code>chunkById()</code> or <code>lazyById()</code> instead of <code>get()</code> for large sets.</li>
+            <li>Long exports split into queued jobs with explicit tenant context.</li>
+            <li>Job timeouts below the queue's <code>retry_after</code>.</li>
+            <li>Indexes checked with <code>EXPLAIN</code> on the real queries.</li>
+            <li>Query count, duration and memory logged per run.</li>
+          </ul>
+        </div>
+
+        <aside class="related" aria-labelledby="related-title">
+          <h2 id="related-title">Related</h2>
+          <ul>
+            <li><a href="/articles/building-a-maintainable-laravel-api/">Building a maintainable Laravel API</a></li>
+            <li><a href="/articles/designing-workflow-driven-business-applications/">Designing workflow-driven business applications with Laravel</a></li>
+            <li><a href="/projects/laravel-user-management-api/">Laravel User Management API project page</a></li>
+            <li><a href="/#experience">Julynard Tago-on's work experience</a></li>
+            <li><a href="https://github.com/Julynard" rel="noopener">GitHub profile</a></li>
+          </ul>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>&copy; 2021&ndash;2026 <a href="/">Julynard Tago-on</a>, Laravel / PHP Full-Stack Engineer</p>
+      <ul class="footer-links">
+        <li><a href="/projects/">Projects</a></li>
+        <li><a href="/articles/">Case studies</a></li>
+        <li><a href="https://github.com/Julynard" rel="noopener">GitHub profile</a></li>
+        <li><a href="https://www.linkedin.com/in/julynard-tago-on/" rel="noopener">LinkedIn profile</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/js/vendor/lenis.min.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</body>
+</html>

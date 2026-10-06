@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laravel User Management API | Julynard Tago-on</title>
+  <meta name="description" content="Julynard Tago-on&#x27;s Laravel 12 REST API with a Vue 3 and Inertia dashboard: service and repository layers, Form Request validation and Sanctum tokens.">
+  <meta name="author" content="Julynard Tago-on">
+  <link rel="canonical" href="https://julynardtago-on.netlify.app/projects/laravel-user-management-api/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Julynard Tago-on">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://julynardtago-on.netlify.app/projects/laravel-user-management-api/">
+  <meta property="og:title" content="Laravel User Management API">
+  <meta property="og:description" content="Julynard Tago-on&#x27;s Laravel 12 REST API with a Vue 3 and Inertia dashboard: service and repository layers, Form Request validation and Sanctum tokens.">
+  <meta property="og:image" content="https://julynardtago-on.netlify.app/img/julynard-2026.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:alt" content="Portrait of Julynard Tago-on">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Laravel User Management API">
+  <meta name="twitter:description" content="Julynard Tago-on&#x27;s Laravel 12 REST API with a Vue 3 and Inertia dashboard: service and repository layers, Form Request validation and Sanctum tokens.">
+  <meta name="twitter:image" content="https://julynardtago-on.netlify.app/img/julynard-2026.jpg">
+  <meta name="theme-color" content="#0F1513">
+  <script>
+    // Apply a saved theme before first paint. Dark is the default.
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
+    } catch (e) {}
+  </script>
+
+  <link href="/img/JLT.ico" rel="icon" sizes="any">
+  <link href="/img/icon-192.png" rel="icon" type="image/png" sizes="192x192">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="/css/site.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://julynardtago-on.netlify.app/projects/laravel-user-management-api/#code",
+        "name": "Laravel User Management API",
+        "description": "A Laravel 12 REST API with a Vue 3 and Inertia admin dashboard, built with a service and repository layer, Form Request validation, API Resources, Sanctum token authentication, role-based permissions and soft-delete restore.",
+        "url": "https://julynardtago-on.netlify.app/projects/laravel-user-management-api/",
+        "codeRepository": "https://github.com/Julynard/technical-task-simple-user-management-crud",
+        "programmingLanguage": [
+          "PHP",
+          "JavaScript"
+        ],
+        "runtimePlatform": "PHP 8.2+",
+        "dateCreated": "2026-02-13",
+        "author": {
+          "@id": "https://julynardtago-on.netlify.app/#person",
+          "name": "Julynard Tago-on"
+        },
+        "keywords": "Laravel 12, REST API, Sanctum, Inertia.js, Vue 3, spatie/laravel-permission, PHPStan"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://julynardtago-on.netlify.app/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://julynardtago-on.netlify.app/projects/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Laravel User Management API"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <canvas class="ambient" aria-hidden="true"></canvas>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/" aria-label="Julynard Tago-on, home"><img src="/img/icon-192.png" width="36" height="36" alt=""></a>
+      <nav aria-label="Site">
+        <ul class="nav">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/projects/" aria-current="page">Projects</a></li>
+          <li><a href="/#experience">Experience</a></li>
+          <li><a href="/articles/">Writing</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn btn-small" href="/files/2026-Resume-Julynard.pdf" target="_blank" rel="noopener">Resume PDF</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page">
+      <div class="wrap page-wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects/">Projects</a></li>
+          <li aria-current="page">Laravel User Management API</li>
+          </ol>
+        </nav>
+        <header class="page-head">
+          <p class="kind">Public code on GitHub, technical task, 2026</p>
+          <h1>Laravel User Management API</h1>
+          <p class="page-lede">A Laravel 12 REST API with a Vue 3 and Inertia admin dashboard. It's a small CRUD, but it's built the way I build client APIs: each concern in one place, one error format, and explicit rules for who can do what.</p>
+          <p class="byline">Built by <a href="/" rel="author">Julynard Tago-on</a>, Laravel / PHP Full-Stack Engineer</p>
+        </header>
+
+        <dl class="facts">
+          <dt>Repository</dt>
+          <dd><a class="link" href="https://github.com/Julynard/technical-task-simple-user-management-crud" rel="noopener">Julynard/technical-task-simple-user-management-crud</a></dd>
+          <dt>Type</dt>
+          <dd>Personal technical task, public code (not client work)</dd>
+          <dt>Backend</dt>
+          <dd>Laravel 12, PHP 8.2+, Laravel Sanctum 4, spatie/laravel-permission 6, SQLite by default</dd>
+          <dt>Frontend</dt>
+          <dd>Vue 3 with Inertia.js (Laravel Breeze), Tailwind CSS, Vite</dd>
+          <dt>Quality</dt>
+          <dd>PHPStan level 8 with Larastan, Laravel Pint, PHPUnit, a Postman collection</dd>
+        </dl>
+
+        <div class="article-body">
+          <h2>The problem</h2>
+          <p>The task was a simple user-management CRUD. Even a simple CRUD has to answer the questions every business application does: who is allowed to manage records, what the API sends back when input is wrong, what happens when someone deletes a record and later adds it again, and how the list behaves once it grows past one page.</p>
+
+          <h2>What I built</h2>
+          <ul>
+            <li>A REST API under <code>/api/users</code> with list, create, show, update and delete, plus paginated search on name and email.</li>
+            <li>Token authentication for API clients: <code>POST /api/auth/token</code> issues a Sanctum bearer token, and <code>POST /api/auth/logout</code> revokes it.</li>
+            <li>An admin dashboard (Laravel Breeze, Inertia.js and Vue 3) that calls the same API, maps 422 validation errors onto the matching form fields, and debounces search.</li>
+            <li>Separate tables for the people who log in (<code>backend_users</code>) and the records being managed (<code>users</code>).</li>
+            <li>Roles and permissions (<code>users.view</code>, <code>users.create</code>, <code>users.update</code>, <code>users.delete</code>) seeded for an admin role, with a <code>UserPolicy</code> registered against the model.</li>
+            <li>Soft deletes, with a restore path when a deleted email is created again.</li>
+          </ul>
+
+          <h2>Architecture</h2>
+          <p>Each layer has one job, so a change to validation, business rules or the response shape touches one file:</p>
+          <pre><code>Route (auth:sanctum)
+  → Api\UserController        HTTP in, HTTP out
+  → StoreUserRequest          validation, 422 on failure
+  → UserService               business rules (create or restore)
+  → UserRepositoryInterface   bound to UserRepository (Eloquent)
+  → UserResource              response shape</code></pre>
+          <p>The frontend mirrors this. <code>Dashboard.vue</code> uses a <code>useUsers</code> composable for state and actions, which calls a small <code>userService.js</code> wrapper around Axios. Components under <code>Components/Crud</code> only render.</p>
+
+          <h2>Important engineering decisions</h2>
+          <h3>Admins and managed users are different tables</h3>
+          <p>The people who sign in to the dashboard live in <code>backend_users</code>, which the auth guards and password broker point at. The records being managed live in <code>users</code>. Keeping them apart means a managed record can never sign in by accident, and the CRUD can't edit an administrator's credentials.</p>
+
+          <h3>One validation error format</h3>
+          <p>API requests extend an abstract <code>ApiFormRequest</code> that overrides <code>failedValidation()</code>, so every validation failure returns <code>422</code> with <code>{"message": "Validation failed", "errors": {...}}</code>. The dashboard relies on that shape to put each message under the right field.</p>
+
+          <h3>Re-creating a deleted user restores it</h3>
+          <p>The <code>email</code> column has a unique index, and soft-deleted rows still hold their email. Validation ignores soft-deleted rows, and <code>UserService::create()</code> checks for a trashed record with the same email first: if there is one, it restores it, fills the new values, stamps <code>restored_at</code> and returns <code>200</code> with "User reactivated". Otherwise it creates a new record and returns <code>201</code>. The client can tell the two outcomes apart, and the database constraint is never hit.</p>
+
+          <h3>The repository sits behind an interface</h3>
+          <p><code>AppServiceProvider</code> binds <code>UserRepositoryInterface</code> to the Eloquent implementation. The service depends only on the interface, so the query logic can change, or be faked in a test, without touching business rules.</p>
+
+          <h2>Testing and static analysis</h2>
+          <p>The repository includes Breeze's feature tests for authentication, registration, password reset, email verification and profile updates. PHPStan runs at level 8 with Larastan over <code>app</code> and <code>routes</code>, and Laravel Pint handles formatting. A Postman collection covers the API and saves the issued token automatically.</p>
+          <p>The API endpoints themselves don't have feature tests yet. They're the next thing to add: validation errors, the restore path, pagination and token revocation.</p>
+
+          <h2>Performance considerations</h2>
+          <ul>
+            <li>The list endpoint is paginated (10 per page by default) and ordered by newest first.</li>
+            <li>Search runs <code>LIKE '%term%'</code> across first name, last name and email. A migration adds indexes on <code>first_name</code> and <code>last_name</code>, but a pattern with a leading wildcard can't use a B-tree index to seek, so the database still scans. That's fine at this size. For a large table I'd switch to prefix matching or a full-text index.</li>
+            <li><code>per_page</code> comes straight from the query string, so it should be capped before this goes anywhere near production.</li>
+          </ul>
+
+          <h2>What I'd change next</h2>
+          <p>The <code>UserPolicy</code> and permissions are in place, but the API controller doesn't call them yet, so any valid token can perform every action. Enforcing the policy in each controller action, and adding the API feature tests above, are the two changes that would make this production-ready.</p>
+          <p>I go through these decisions in more detail, with code, in <a href="/articles/building-a-maintainable-laravel-api/">Building a maintainable Laravel API</a>.</p>
+        </div>
+
+        <aside class="related" aria-labelledby="related-title">
+          <h2 id="related-title">Related</h2>
+          <ul>
+            <li><a href="https://github.com/Julynard/technical-task-simple-user-management-crud" rel="noopener">Laravel User Management API source on GitHub</a></li>
+            <li><a href="/articles/building-a-maintainable-laravel-api/">Case study: building a maintainable Laravel API</a></li>
+            <li><a href="/articles/fixing-n-plus-one-queries-in-laravel-exports/">Laravel performance case study: N+1 queries and export timeouts</a></li>
+            <li><a href="/projects/">All projects and public repositories</a></li>
+            <li><a href="/">Julynard Tago-on, Laravel / PHP Full-Stack Engineer</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>&copy; 2021&ndash;2026 <a href="/">Julynard Tago-on</a>, Laravel / PHP Full-Stack Engineer</p>
+      <ul class="footer-links">
+        <li><a href="/projects/">Projects</a></li>
+        <li><a href="/articles/">Case studies</a></li>
+        <li><a href="https://github.com/Julynard" rel="noopener">GitHub profile</a></li>
+        <li><a href="https://www.linkedin.com/in/julynard-tago-on/" rel="noopener">LinkedIn profile</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/js/vendor/lenis.min.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</body>
+</html>
