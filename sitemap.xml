@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://julynardtago-on.netlify.app/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/projects/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/projects/laravel-user-management-api/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/articles/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/articles/building-a-maintainable-laravel-api/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/articles/designing-workflow-driven-business-applications/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://julynardtago-on.netlify.app/articles/fixing-n-plus-one-queries-in-laravel-exports/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+</urlset>

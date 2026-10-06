@@ -256,12 +256,6 @@
   new window.Lenis({ autoRaf: true, anchors: true });
 })();
 
-// Repo links without a URL yet: clickable, but they don't jump the page.
-document.addEventListener('click', function (e) {
-  var link = e.target.closest && e.target.closest('a.repo-link[href="#"]');
-  if (link) e.preventDefault();
-});
-
 // Projects scroller: loops forever, cards drifting in from the left.
 // Hover, focus, dragging or the arrows pause it; reduced motion stops it.
 (function () {

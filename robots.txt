@@ -1,0 +1,6 @@
+# Every crawler may index the whole site, including Googlebot, Bingbot
+# and OAI-SearchBot (ChatGPT search). Nothing on this site is private.
+User-agent: *
+Allow: /
+
+Sitemap: https://julynardtago-on.netlify.app/sitemap.xml
